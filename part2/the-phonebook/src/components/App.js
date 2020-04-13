@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
+import axios from 'axios'
 import Filter from './Filter'
 import Form from './Form'
 import Persons from './Persons'
 
 function App() {
-  const [ persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '07456-290-2777' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ]) 
+  const [ persons, setPersons] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filterTerm, setFilterTerm] = useState('')
+
+  React.useEffect(() => {
+    console.log('sideffect start')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => setPersons(response.data))
+  }, [])
   
   const changeName = (e) => setNewName(e.target.value)
   const changeNumber = (e) => setNewNumber(e.target.value)
@@ -23,7 +26,6 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault()
     const newEntry = persons.map(person => person.name).indexOf(newName)
-    console.log('newEntry', newEntry)
     if (newEntry === -1) {
       const newPerson = [{ 
         name: newName,
