@@ -27,15 +27,6 @@ const CountriesList = ({ countries, filterTerm }) => {
 
 const CountryBio = ({ country }) => {
 
-  const [weather, setWeather] = React.useState({})
-  const accessKey = process.env.REACT_APP_WEATHER_API_KEY
-
-  React.useEffect(() => {
-    axios
-      .get(`http://api.weatherstack.com/current?access_key=${accessKey}&query=${country.capital}&units=m`)
-      .then(response => setWeather(response.data))
-  }, [country, accessKey])
-  
   return (
     <div key={country.name}>
       <h1>{country.name}</h1>
@@ -46,7 +37,7 @@ const CountryBio = ({ country }) => {
         {country.languages.map(language => <li key={language.name}>{language.name}</li>)}
       </ul>}
       <img src={country.flag} alt="Country Flag" width="100" />
-      {(Object.keys(weather).length !== 0) ? <WeatherInfo weather={weather} /> : null}
+      <WeatherInfo country={country} />
     </div>
   )
 }
@@ -62,15 +53,25 @@ const ToggleBio = ({ country }) => {
   )
 }
 
-const WeatherInfo = ({ weather }) => {
-  return (
+const WeatherInfo = ({ country }) => {
+  const [weather, setWeather] = React.useState({})
+  const accessKey = process.env.REACT_APP_WEATHER_API_KEY
+  
+  React.useEffect(() => {
+    axios
+      .get(`http://api.weatherstack.com/current?access_key=${accessKey}&query=${country.capital}&units=m`)
+      .then(response => setWeather(response.data))
+      .catch(error => setWeather({}))
+  }, [country.capital, accessKey])
+
+  return Object.keys(weather).length > 0 ? (
     <div>
       <h2>Weather in {weather.location.name}</h2>
       <p><strong>temperature: </strong>{weather.current.temperature} Celsius</p>
       <img src={weather.current.weather_icons[0]} alt="Weather Icon" />
       <p><strong>wind: </strong>{weather.current.wind_speed} m/s direction {weather.current.wind_dir}</p>
     </div>
-  )
+  ) : null
 }
 
 const App = () => {
