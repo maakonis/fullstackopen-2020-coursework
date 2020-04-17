@@ -1,21 +1,6 @@
 {
   "persons": [
     {
-      "name": "Kristaps Porzingis",
-      "number": "37-4353-5454",
-      "id": 9
-    },
-    {
-      "name": "Lebron James",
-      "number": "37-7656-4343",
-      "id": 10
-    },
-    {
-      "name": "Kyrie Irving",
-      "number": "37-2342-7655",
-      "id": 11
-    },
-    {
       "name": "Lauri Markkanen",
       "number": "34-3412-4123",
       "id": 13
@@ -24,6 +9,21 @@
       "name": "Steph Curry",
       "number": "12-3123-3124",
       "id": 14
+    },
+    {
+      "name": "Marc Gasol",
+      "number": "32-111-233322",
+      "id": 15
+    },
+    {
+      "name": "Pau Gasol",
+      "number": "44-333-9999",
+      "id": 16
+    },
+    {
+      "name": "Luka Doncic",
+      "number": "32-2221-1111",
+      "id": 17
     }
   ]
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Filter from './Filter'
 import Form from './Form'
 import Persons from './Persons'
+import Notification from './Notification'
 import phoneService from '../services/phoneService'
 
 function App() {
@@ -9,6 +10,8 @@ function App() {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterTerm, setFilterTerm] = useState('')
+  const [notification, setNotification] = useState(null)
+  const [isError, setIsError] = useState(false)
 
   React.useEffect(() => {
     phoneService.getAll()
@@ -32,7 +35,11 @@ function App() {
         number: newNumber
       }
       phoneService.create(newPerson)
-        .then(newPerson => setPersons(persons.concat(newPerson)))
+        .then(newPerson => {
+          setPersons(persons.concat(newPerson))
+          setNotification(`${newPerson.name} has been added to the phonebook.`)
+          setTimeout(() => setNotification(null), 5000)
+        })
       setNewName('')
       setNewNumber('')
     } else {
@@ -40,8 +47,17 @@ function App() {
         const existingPerson = persons[entryIndex]
         const updateNumber = { ...existingPerson, number: newNumber }
         phoneService.update(existingPerson.id, updateNumber)
-          .then(response => setPersons(persons
-            .map(person => person.id !== existingPerson.id ? person : response)))
+          .then(response => {
+            setPersons(persons
+              .map(person => person.id !== existingPerson.id ? person : response))
+            setNotification(`${response.name}'s phone number has been updated.`)
+            setIsError(false)
+            setTimeout(() => setNotification(null), 5000)
+          })
+          .catch(() => {
+            setNotification(`${existingPerson.name} has already been deleted from the server.`)
+            setIsError(true)
+          })
         setNewName('')
         setNewNumber('')
       }
@@ -51,6 +67,7 @@ function App() {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} isError={isError} />
       <Filter value={filterTerm} handleFilter={handleFilter} />
       <Form onSubmit={handleSubmit}
         name={newName}
