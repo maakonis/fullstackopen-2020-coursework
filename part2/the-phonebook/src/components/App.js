@@ -7,6 +7,7 @@ import phoneService from '../services/phoneService'
 
 function App() {
   const [persons, setPersons] = useState([])
+  console.log('persons', persons)
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterTerm, setFilterTerm] = useState('')
