@@ -7,7 +7,6 @@ import phoneService from '../services/phoneService'
 
 function App() {
   const [persons, setPersons] = useState([])
-  console.log('persons', persons)
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterTerm, setFilterTerm] = useState('')
@@ -40,6 +39,11 @@ function App() {
           setPersons(persons.concat(newPerson))
           setNotification(`${newPerson.name} has been added to the phonebook.`)
           setTimeout(() => setNotification(null), 5000)
+        })
+        .catch(error => {
+          console.log(error.response.data)
+          setNotification(error.response.data.error)
+          setIsError(true)
         })
       setNewName('')
       setNewNumber('')
