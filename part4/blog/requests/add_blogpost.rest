@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "It didn’t have to be this way",
-    "author": "Silvia Camporesi",
-    "url": "https://aeon.co/essays/a-bioethicist-on-the-hidden-costs-of-lockdown-in-italy",
-    "likes": 3809
+    "title": 3235,
+    "author": 234523,
+    "url": "https://youtube.com",
+    "likes": 120
 }
