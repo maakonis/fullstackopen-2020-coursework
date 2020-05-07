@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
-{
-    "title": 3235,
-    "author": 234523,
-    "url": "https://youtube.com",
-    "likes": 120
-}
+  {
+    "title": "RESTful APIs",
+    "author": "Michael Chan",
+    "url": "https://reactpatterns.com/",
+    "likes": 35
+  }
