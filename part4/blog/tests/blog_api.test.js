@@ -30,13 +30,18 @@ test('blogs are returned as json', async () => {
 
 test('correct number of blogs is returned', async () => {
   const response = await helper.blogsInDb();
+
   expect(response)
     .toHaveLength(helper.initialBlogs.length);
 });
 
 test('blog document ids is defined', async () => {
   const response = await helper.blogsInDb();
+
+  const oldIdees = response.map((blog) => blog._id);
   const idees = response.map((blog) => blog.id);
+
+  oldIdees.map((id) => expect(id).not.toBeDefined());
   idees.map((id) => expect(id).toBeDefined());
 });
 
@@ -89,6 +94,33 @@ test('bad request 400 if title and url missing', async () => {
     .post('/api/blogs')
     .send(newBlog)
     .expect(400);
+});
+
+test('delete a blog entry', async () => {
+  const blogsBeforeDelete = await helper.blogsInDb();
+  const removedBlogId = blogsBeforeDelete[0].id;
+  await api
+    .del(`/api/blogs/${removedBlogId}`)
+    .expect(204);
+
+  const blogsAfterDelete = await helper.blogsInDb();
+  const remainingIds = blogsAfterDelete.map((blog) => blog.id);
+  expect(remainingIds).not.toContain(removedBlogId);
+});
+
+test('update a blog entry', async () => {
+  const blogsBeforeUpdate = await helper.blogsInDb();
+  const blogId = blogsBeforeUpdate[0].id;
+  const blogUpdate = { likes: 1423 };
+
+  await api
+    .put(`/api/blogs/${blogId}`)
+    .send(blogUpdate)
+    .expect(200);
+
+  const blogsAfterUpdate = await helper.blogsInDb();
+  const updatedBlog = blogsAfterUpdate.find((blog) => blog.id === blogId);
+  expect(updatedBlog.likes).toBe(blogUpdate.likes);
 });
 
 afterAll(() => {

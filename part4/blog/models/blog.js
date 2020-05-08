@@ -2,6 +2,10 @@
 /* eslint-disable no-param-reassign */
 const mongoose = require('mongoose');
 
+// Make Mongoose use `findOneAndUpdate()`. Note that this option is `true`
+// by default, you need to set it to false.
+mongoose.set('useFindAndModify', false);
+
 const blogSchema = mongoose.Schema({
   title: { type: String, required: true },
   author: { type: String, required: true },
