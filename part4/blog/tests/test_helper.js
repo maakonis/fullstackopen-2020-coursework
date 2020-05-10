@@ -1,4 +1,8 @@
+/* eslint-disable no-underscore-dangle */
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
 const Blog = require('../models/blog');
+const User = require('../models/user');
 
 // create a collection of test documents
 const initialBlogs = [
@@ -18,12 +22,8 @@ const initialBlogs = [
 
 const nonExistingId = async () => {
   const blog = new Blog({ content: 'willremovethissoon' });
-  console.log('blog after creating a new Blog document', blog);
   await blog.save();
-  console.log('blog after saving', blog);
   await blog.remove();
-  console.log('blog after removing', blog);
-
   return blog._id.toString();
 };
 
@@ -32,6 +32,28 @@ const blogsInDb = async () => {
   return blogs.map((blog) => blog.toJSON());
 };
 
+const usersInDb = async () => {
+  const users = await User.find({});
+  return users.map((user) => user.toJSON());
+};
+
+const userToken = async () => {
+  // generate an access token
+  const userAfterSave = await User.findOne({ username: 'testuser' });
+
+  const userForToken = {
+    username: userAfterSave.username,
+    id: userAfterSave._id,
+  };
+
+  const signToken = jwt.sign(userForToken, process.env.SECRET);
+  return signToken;
+};
+
 module.exports = {
-  initialBlogs, nonExistingId, blogsInDb,
+  initialBlogs,
+  nonExistingId,
+  blogsInDb,
+  usersInDb,
+  userToken,
 };

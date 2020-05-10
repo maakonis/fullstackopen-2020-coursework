@@ -1,8 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer ...
 
   {
-    "title": "RESTful APIs",
+    "title": "new cabbage npm library",
     "author": "Michael Chan",
     "url": "https://reactpatterns.com/",
     "likes": 35
