@@ -66,10 +66,17 @@ blogsRouter.delete('/:id', async (request, response) => {
 
 blogsRouter.put('/:id', async (request, response) => {
   const { body } = request;
+
   // Note: findByIdAndUpdate() options.new=true
   // returns the updated document not the old one
+  const decodedToken = jwt.verify(body.token, process.env.SECRET);
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token invalid or missing' });
+  }
+
   const updatedBlog = await Blog
-    .findByIdAndUpdate(request.params.id, body, { new: true });
+    .findByIdAndUpdate(request.params.id, body, { new: true })
+    .populate('user', { username: 1, name: 1, id: 1 });
   response.status(200).json(updatedBlog.toJSON());
 });
 
