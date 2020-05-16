@@ -55,7 +55,7 @@ const App = () => {
       setUsername('')
     } catch (error) {
       console.log('login error', error)
-      await putNotification(true, 'wrong username or pasword')
+      await putNotification(true, 'wrong username or password')
     }
   }
 
