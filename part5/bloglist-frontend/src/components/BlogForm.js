@@ -1,60 +1,45 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useDispatch } from 'react-redux'
+import { useField } from '../hooks/hooks'
+import { addBlog } from '../reducers/blogReducer'
+import { setNotify } from '../reducers/notifyReducer'
 
-const BlogForm = ({ createBlog, putNotification }) => {
-  const [newBlog, setNewBlog] = useState({
-    title: '',
-    author: '',
-    url: '',
-  })
+const BlogForm = () => {
+  const dispatch = useDispatch()
 
-  const handleBlogChange = (event) => {
-    const { target } = event
-    const name = target.name
-    const value = target.value
-    setNewBlog({ ...newBlog, [name]: value })
-  }
+  const { reset: clearTitle, ...title } = useField('title')
+  const { reset: clearAuthor, ...author } = useField('author')
+  const { reset: clearUrl, ...url } = useField('url')
 
-  const handleBlogSubmit = async (event) => {
+  const handleBlogSubmit = (event) => {
     event.preventDefault()
-    await createBlog(newBlog)
-    await putNotification(
-      false,
-      `Blog ${newBlog.title} by ${newBlog.author} has been added.`
-    )
-    setNewBlog({ title: '', author: '', url: '' })
+    const newBlog = {
+      title: title.value,
+      author: author.value,
+      url: url.value
+    }
+    dispatch(addBlog(newBlog))
+      .catch(error => console.log('blog post error', error.message))
+    dispatch(setNotify(`Blog ${newBlog.title} by ${newBlog.author} added!`))
+    clearTitle()
+    clearAuthor()
+    clearUrl()
   }
 
   return (
-    <form onSubmit={handleBlogSubmit}>
+    <form onSubmit={handleBlogSubmit} id="blog-form">
       <p>title:
-        <input
-          type="text"
-          name="title"
-          value={newBlog.title}
-          onChange={handleBlogChange}
-        />
+        <input { ...title } name="title"/>
       </p>
       <p>author:
-        <input
-          type="text"
-          name="author"
-          value={newBlog.author}
-          onChange={handleBlogChange}
-        />
+        <input { ...author } name="author"/>
       </p>
       <p>url:
-        <input
-          type="text"
-          name="url"
-          value={newBlog.url}
-          onChange={handleBlogChange}
-        />
+        <input { ...url } type="source" name="url" />
         <button type="submit">Upload</button>
       </p>
     </form>
   )
 }
-
-
 
 export default BlogForm

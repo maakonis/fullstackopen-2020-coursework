@@ -1,29 +1,69 @@
 import React from 'react'
-const Blog = ({ blog, updateBlog, deleteBlog }) => {
-  const [visible, setVisible] = React.useState(false)
-  const display = { display: visible ? '' : 'none' }
+import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
+import { upvoteBlog, deleteBlog, addComment } from '../reducers/blogReducer'
+import { setNotify } from '../reducers/notifyReducer'
+import { useField } from '../hooks/hooks'
 
-  const blogStyle = {
-    paddingTop: 10, paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
+const Blog = ({ blog }) => {
+  const dispatch = useDispatch()
+  const history = useHistory()
+  const { reset: commentReset, ...comment } = useField('comment')
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    const newComment = {
+      content: comment.value
+    }
+    console.log('handlesubmit newcomment', newComment)
+    dispatch(addComment(newComment, blog))
+    commentReset()
   }
 
-  const handleVote = async () => {
-    await updateBlog(blog, blog.likes + 1 )
+  if (!blog) {
+    return null
+  }
+
+  const handleVote = () => {
+    dispatch(upvoteBlog(blog))
+      .catch(error => console.log('blog vote error:', error.response))
+  }
+
+  const handleDelete = async () => {
+    try {
+      await dispatch(deleteBlog(blog))
+      dispatch(setNotify('blog deleted', false))
+      history.push('/')
+    } catch(error) {
+      if (error.response.status === 401) {
+        return dispatch(setNotify('user not authorized to delete blog', true))
+      }
+      return console.log('login error', error.response)
+    }
   }
 
   return (
-    <div id={blog.id} style={blogStyle}>
-      {blog.title} {blog.author}
-      <button onClick={() => setVisible(!visible)}>{visible ? 'hide' : 'show'}</button>
-      <div style={display} className="blogExtraInfo">
-        <div>url: {blog.url}</div>
-        <div>likes: <span className="blog-likes">{blog.likes}</span> <button onClick={handleVote} className="vote">Vote</button></div>
-        <div>user: {blog.user.name}</div>
-        <div><button onClick={async () => deleteBlog(blog)}>Delete</button></div>
+    <div>
+      <h1>{blog.title} {blog.author}</h1>
+      <div className="blogExtraInfo">
+        <div><a href={blog.url}>{blog.url}</a></div>
+        <div>
+          likes: <span className="blog-likes">{blog.likes}</span>
+          <button onClick={handleVote} className="vote">Vote</button>
+        </div>
+        <div>added by {blog.user.name}</div>
+        <div><button onClick={handleDelete}>Delete</button></div>
       </div>
+      <h3>Comments</h3>
+      <form onSubmit={handleSubmit}>
+        <input { ...comment } />
+        <button type="submit">Upload</button>
+      </form>
+      <ul>
+        {blog.comments.map((comment) => {
+          return <li key={comment.id}>{comment.content}</li>
+        })}
+      </ul>
     </div>
   )
 
