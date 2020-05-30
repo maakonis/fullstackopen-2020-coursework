@@ -1,36 +1,30 @@
 import loginService from '../services/login'
 import blogService from '../services/blogs'
 
-export const login = (credentials) => {
-  return async dispatch => {
-    const user = await loginService.login(credentials)
-    blogService.setToken(user.token)
-    console.log('user.token', user.token)
-    window.localStorage
-      .setItem('loggedUser', JSON.stringify(user))
-    dispatch({
-      type: 'LOGIN',
-      data: user
-    })
-  }
+export const login = (credentials) => async (dispatch) => {
+  const user = await loginService.login(credentials)
+  blogService.setToken(user.token)
+  console.log('user.token', user.token)
+  window.localStorage
+    .setItem('loggedUser', JSON.stringify(user))
+  dispatch({
+    type: 'LOGIN',
+    data: user,
+  })
 }
 
-export const rememberUser = (user) => {
-  return dispatch => {
-    dispatch({
-      type: 'REMEMBER',
-      data: user
-    })
-  }
+export const rememberUser = (user) => (dispatch) => {
+  dispatch({
+    type: 'REMEMBER',
+    data: user,
+  })
 }
 
-export const logout = () => {
-  return dispatch => {
-    dispatch({
-      type: 'LOGOUT',
-      data: null
-    })
-  }
+export const logout = () => (dispatch) => {
+  dispatch({
+    type: 'LOGOUT',
+    data: null,
+  })
 }
 
 const reducer = (state = null, action) => {

@@ -1,13 +1,13 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { Navbar, Nav, Button } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import LoginForm from './LoginForm'
 import { logout } from '../reducers/loginReducer'
 import { resetBlog } from '../reducers/blogReducer'
-import { Navbar, Nav, Button } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
 
 const Menu = () => {
-  const user = useSelector(store => store.user)
+  const user = useSelector((store) => store.user)
   const dispatch = useDispatch()
 
   const padding = {
@@ -36,7 +36,12 @@ const Menu = () => {
             <Link style={padding} to="/users">users</Link>
           </Nav.Link>
           <Nav.Link href="#" as="span">
-            <em>{user.name} logged in</em><Button onClick={handleLogout}>Logout</Button>
+            <em>
+              {user.name}
+              {' '}
+              logged in
+            </em>
+            <Button onClick={handleLogout}>Logout</Button>
           </Nav.Link>
         </Nav>
       </Navbar.Collapse>

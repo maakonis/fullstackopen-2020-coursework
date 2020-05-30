@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { Alert } from 'react-bootstrap'
 
 const Notification = () => {
-  const notification = useSelector(state => state.notification)
+  const notification = useSelector((state) => state.notification)
 
   if (notification === null) {
     return null
@@ -11,10 +11,12 @@ const Notification = () => {
 
   return (
     <div className="container">
-      {(notification &&
-        <Alert variant={notification.error ? "danger" : "success"}>
-          {notification.message}
-        </Alert>
+      {(notification
+        && (
+          <Alert variant={notification.error ? 'danger' : 'success'}>
+            {notification.message}
+          </Alert>
+        )
       )}
     </div>
   )

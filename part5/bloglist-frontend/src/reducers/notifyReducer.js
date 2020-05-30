@@ -1,23 +1,17 @@
-const showNotify = (message, error) => {
-  return {
-    type: 'SHOW_NOTIFY',
-    data: { message, error }
-  }
-}
+const showNotify = (message, error) => ({
+  type: 'SHOW_NOTIFY',
+  data: { message, error },
+})
 
-export const hideNotify = () => {
-  return {
-    type: 'HIDE_NOTIFY',
-  }
-}
+export const hideNotify = () => ({
+  type: 'HIDE_NOTIFY',
+})
 
 let timeout
-export const setNotify = (message, error) => {
-  return dispatch => {
-    dispatch(showNotify(message, error))
-    clearTimeout(timeout)
-    timeout = setTimeout(() => dispatch(hideNotify()), 5000)
-  }
+export const setNotify = (message, error) => (dispatch) => {
+  dispatch(showNotify(message, error))
+  clearTimeout(timeout)
+  timeout = setTimeout(() => dispatch(hideNotify()), 5000)
 }
 
 const reducer = (state = null, action) => {

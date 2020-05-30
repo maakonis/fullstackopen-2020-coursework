@@ -13,7 +13,7 @@ const Blog = ({ blog }) => {
   const handleSubmit = (event) => {
     event.preventDefault()
     const newComment = {
-      content: comment.value
+      content: comment.value,
     }
     console.log('handlesubmit newcomment', newComment)
     dispatch(addComment(newComment, blog))
@@ -26,15 +26,15 @@ const Blog = ({ blog }) => {
 
   const handleVote = () => {
     dispatch(upvoteBlog(blog))
-      .catch(error => console.log('blog vote error:', error.response))
+      .catch((error) => console.log('blog vote error:', error.response))
   }
 
   const handleDelete = async () => {
     try {
       await dispatch(deleteBlog(blog))
       dispatch(setNotify('blog deleted', false))
-      history.push('/')
-    } catch(error) {
+      return history.push('/')
+    } catch (error) {
       if (error.response.status === 401) {
         return dispatch(setNotify('user not authorized to delete blog', true))
       }
@@ -44,29 +44,35 @@ const Blog = ({ blog }) => {
 
   return (
     <div>
-      <h1>{blog.title} {blog.author}</h1>
+      <h1>
+        {blog.title}
+        {' '}
+        {blog.author}
+      </h1>
       <div className="blogExtraInfo">
         <div><a href={blog.url}>{blog.url}</a></div>
         <div>
-          likes: <span className="blog-likes">{blog.likes}</span>
-          <button onClick={handleVote} className="vote">Vote</button>
+          likes:
+          {' '}
+          <span className="blog-likes">{blog.likes}</span>
+          <button onClick={handleVote} className="vote" type="submit">Vote</button>
         </div>
-        <div>added by {blog.user.name}</div>
-        <div><button onClick={handleDelete}>Delete</button></div>
+        <div>
+          added by
+          {blog.user.name}
+        </div>
+        <div><button onClick={handleDelete} type="submit">Delete</button></div>
       </div>
       <h3>Comments</h3>
       <form onSubmit={handleSubmit}>
-        <input { ...comment } />
+        <input {...comment} />
         <button type="submit">Upload</button>
       </form>
       <ul>
-        {blog.comments.map((comment) => {
-          return <li key={comment.id}>{comment.content}</li>
-        })}
+        {blog.comments.map((obj) => <li key={obj.id}>{obj.content}</li>)}
       </ul>
     </div>
   )
-
 }
 
 export default Blog

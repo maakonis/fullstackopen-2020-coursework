@@ -6,12 +6,12 @@ import BlogForm from './BlogForm'
 test('adds a new blog correctly', () => {
   const createBlog = jest.fn()
   const putNotification = jest.fn()
-  let component
 
-  component =  render(
+  const component = render(
     <BlogForm
       createBlog={createBlog}
-      putNotification={putNotification} />
+      putNotification={putNotification}
+    />,
   )
 
   const titleInput = component.container.querySelector('input[name="title"]')
@@ -24,19 +24,19 @@ test('adds a new blog correctly', () => {
     target: {
       value: 'Testing the title',
       name: 'title',
-    }
+    },
   })
   fireEvent.change(authorInput, {
     target: {
       value: 'Michael Jordan',
       name: 'author',
-    }
+    },
   })
   fireEvent.change(urlInput, {
     target: {
       value: 'www.nba.com',
       name: 'url',
-    }
+    },
   })
   fireEvent.submit(form)
 

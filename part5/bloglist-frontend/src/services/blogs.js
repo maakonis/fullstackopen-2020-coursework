@@ -1,9 +1,10 @@
 import axios from 'axios'
+
 const baseUrl = '/api/blogs'
 
 let token = null
 
-const setToken = newToken => {
+const setToken = (newToken) => {
   token = `Bearer ${newToken}`
 }
 
@@ -12,9 +13,9 @@ const getAll = async () => {
   return response.data
 }
 
-const create = async newObj => {
+const create = async (newObj) => {
   const config = {
-    headers: { Authorization: token }
+    headers: { Authorization: token },
   }
   const response = await axios.post(baseUrl, newObj, config)
   return response.data
@@ -22,7 +23,7 @@ const create = async newObj => {
 
 const createComment = async (newObj, blogId) => {
   const config = {
-    headers: { Authorization: token }
+    headers: { Authorization: token },
   }
   console.log('config', config)
   const url = `${baseUrl}/${blogId}/comments`
@@ -32,9 +33,9 @@ const createComment = async (newObj, blogId) => {
   return response.data
 }
 
-const update = async newObj => {
+const update = async (newObj) => {
   const config = {
-    headers: { Authorization: token }
+    headers: { Authorization: token },
   }
   const { id } = newObj
   const url = `${baseUrl}/${id}`
@@ -44,7 +45,7 @@ const update = async newObj => {
 
 const remove = async (newObj) => {
   const config = {
-    headers: { Authorization: token }
+    headers: { Authorization: token },
   }
   const { id } = newObj
   const url = `${baseUrl}/${id}`
@@ -52,4 +53,6 @@ const remove = async (newObj) => {
   return response.data
 }
 
-export default { getAll, create, update, remove, setToken, createComment }
+export default {
+  getAll, create, update, remove, setToken, createComment,
+}

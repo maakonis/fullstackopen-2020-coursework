@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Form, Button }from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { login, rememberUser } from '../reducers/loginReducer'
 import { useField } from '../hooks/hooks'
@@ -19,26 +19,24 @@ const LoginForm = () => {
       dispatch(rememberUser(loggedUser))
       blogService.setToken(loggedUser.token)
     }
-  }, [ dispatch ])
+  }, [dispatch])
 
   const handleLogin = (event) => {
     event.preventDefault()
     const credentials = {
       username: username.value,
-      password: password.value
+      password: password.value,
     }
-    dispatch(login(credentials)).catch(error => {
-
+    dispatch(login(credentials)).catch((error) => {
       if (error.response.status === 401) {
         console.log('401 error', error.response)
         return dispatch(setNotify('wrong username or password', true))
       }
-      console.log('login error', error.response)
+      return console.log('login error', error.response)
     })
-    console.log('enter purgatory')
-    dispatch(hideNotify())
     usernameReset()
     passwordReset()
+    return dispatch(hideNotify())
   }
 
   return (
@@ -46,9 +44,9 @@ const LoginForm = () => {
       <Form onSubmit={handleLogin}>
         <Form.Group>
           <Form.Label>username</Form.Label>
-          <Form.Control id="username" { ...username } />
+          <Form.Control id="username" {...username} />
           <Form.Label>password</Form.Label>
-          <Form.Control id="password" { ...password } />
+          <Form.Control id="password" {...password} />
           <Button variant="primary" id="login-submit" type="submit">Login</Button>
         </Form.Group>
       </Form>

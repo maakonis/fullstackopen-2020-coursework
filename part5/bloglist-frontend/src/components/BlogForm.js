@@ -16,10 +16,10 @@ const BlogForm = () => {
     const newBlog = {
       title: title.value,
       author: author.value,
-      url: url.value
+      url: url.value,
     }
     dispatch(addBlog(newBlog))
-      .catch(error => console.log('blog post error', error.message))
+      .catch((error) => console.log('blog post error', error.message))
     dispatch(setNotify(`Blog ${newBlog.title} by ${newBlog.author} added!`))
     clearTitle()
     clearAuthor()
@@ -28,14 +28,17 @@ const BlogForm = () => {
 
   return (
     <form onSubmit={handleBlogSubmit} id="blog-form">
-      <p>title:
-        <input { ...title } name="title"/>
+      <p>
+        title:
+        <input {...title} name="title" />
       </p>
-      <p>author:
-        <input { ...author } name="author"/>
+      <p>
+        author:
+        <input {...author} name="author" />
       </p>
-      <p>url:
-        <input { ...url } type="source" name="url" />
+      <p>
+        url:
+        <input {...url} type="source" name="url" />
         <button type="submit">Upload</button>
       </p>
     </form>

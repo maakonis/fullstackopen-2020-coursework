@@ -20,39 +20,31 @@ import { initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
   const dispatch = useDispatch()
-  const user = useSelector(store => store.user)
-  console.log('user', user)
+  const user = useSelector((store) => store.user)
 
-  const allUsers = useSelector(store => {
-    console.log('store.blogs', store.blogs)
-    return store.blogs
-      .reduce((result, blog) => {
-        if (!result.find((user) => user.id === blog.user.id)) {
-          result.push(blog.user)
-        }
-        return result
-      }, [])}
-  )
+  const allUsers = useSelector((store) => store.blogs
+    .reduce((result, blog) => {
+      if (!result.find((obj) => obj.id === blog.user.id)) {
+        result.push(blog.user)
+      }
+      return result
+    }, []))
 
-  const blogs = useSelector(store => store.blogs)
+  const blogs = useSelector((store) => store.blogs)
 
   useEffect(() => {
-    console.log('App useEffect')
     if (user !== null) {
       dispatch(initializeBlogs())
     }
-  }, [ user ])
-
-  console.log('allUsers', allUsers)
+  }, [user])
 
   const blogFormRef = React.createRef()
 
   const userMatch = useRouteMatch('/users/:id')
-  console.log('userMatch', userMatch)
 
   const oneUser = userMatch
     ? allUsers
-      .find(user => user.id === userMatch.params.id)
+      .find((obj) => obj.id === userMatch.params.id)
     : null
 
   const blogMatch = useRouteMatch('/blogs/:id')
@@ -61,41 +53,43 @@ const App = () => {
     ? blogs.find((blog) => blog.id === blogMatch.params.id)
     : null
 
-  console.log('oneUser', oneUser)
+
   return (
     <div className="container">
-      { user === null ?
-        <div>
-          <h2>Log into application</h2>
-          <Notification />
-          <LoginForm />
-        </div>
-        :
-        <div>
-          <Menu />
-          <Notification />
-          <h2>Blogs App</h2>
-          <Switch>
-            <Route path="/users/:id">
-              <UserInfo user={oneUser} />
-            </Route>
-            <Route path="/blogs/:id">
-              <Blog blog={oneBlog} />
-            </Route>
-            <Route path="/users">
-              <UserSummary />
-            </Route>
-            <Route path="/">
-              <div>
-                <Togglable buttonLabel="Create Blog" ref={blogFormRef}>
-                  <BlogForm />
-                </Togglable>
-                <BlogList />
-              </div>
-            </Route>
-          </Switch>
-        </div>
-      }
+      { user === null
+        ? (
+          <div>
+            <h2>Log into application</h2>
+            <Notification />
+            <LoginForm />
+          </div>
+        )
+        : (
+          <div>
+            <Menu />
+            <Notification />
+            <h2>Blogs App</h2>
+            <Switch>
+              <Route path="/users/:id">
+                <UserInfo user={oneUser} />
+              </Route>
+              <Route path="/blogs/:id">
+                <Blog blog={oneBlog} />
+              </Route>
+              <Route path="/users">
+                <UserSummary />
+              </Route>
+              <Route path="/">
+                <div>
+                  <Togglable buttonLabel="Create Blog" ref={blogFormRef}>
+                    <BlogForm />
+                  </Togglable>
+                  <BlogList />
+                </div>
+              </Route>
+            </Switch>
+          </div>
+        )}
     </div>
   )
 }

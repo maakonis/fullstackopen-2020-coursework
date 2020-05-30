@@ -3,10 +3,11 @@ import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 const UserStats = () => {
-  const userData = useSelector(store => {
+  const userData = useSelector((store) => {
     const users = store.blogs
       .reduce((result, blog) => {
         const { name, id } = blog.user
+        // eslint-disable-next-line no-param-reassign
         result[name] = {
           count: result[name] ? result[name].count + 1 : 1,
           id,
@@ -15,8 +16,7 @@ const UserStats = () => {
         return result
       }, {})
     return Object.entries(users).map((entry) => entry[1])
-  }
-  )
+  })
 
   console.log('userData', userData)
 
@@ -26,19 +26,17 @@ const UserStats = () => {
       <table>
         <thead>
           <tr>
-            <td></td>
+            <td />
             <td><strong>blogs created</strong></td>
           </tr>
         </thead>
         <tbody>
-          {userData.map((user) => {
-            return (
-              <tr key={user.id}>
-                <td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
-                <td>{user.count}</td>
-              </tr>
-            )
-          })}
+          {userData.map((user) => (
+            <tr key={user.id}>
+              <td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
+              <td>{user.count}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

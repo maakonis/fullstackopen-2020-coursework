@@ -13,20 +13,20 @@ describe('<Blog />', () => {
       author: 'Elon Musk',
       url: 'www.tesla.com',
       likes: 10,
-      user: { name: 'John', username: 'testjohn' }
+      user: { name: 'John', username: 'testjohn' },
     }
     component = render(
-      <Blog blog={blog} />
+      <Blog blog={blog} />,
     )
   })
 
   test('by default renders only author and title', () => {
     // renders author and title
     expect(component.container).toHaveTextContent(
-      'React Testing Is Important'
+      'React Testing Is Important',
     )
     expect(component.container).toHaveTextContent(
-      'Elon Musk'
+      'Elon Musk',
     )
     // url, user, and likes are hidden by default
     expect(component.container.querySelector('.blogExtraInfo'))
@@ -45,7 +45,7 @@ describe('<Blog />', () => {
     const updateBlog = jest.fn()
 
     component = render(
-      <Blog blog={blog} updateBlog={updateBlog} />
+      <Blog blog={blog} updateBlog={updateBlog} />,
     )
 
     const likeButton = component.container.querySelector('.vote')
